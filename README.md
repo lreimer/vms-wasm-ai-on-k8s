@@ -1,2 +1,10 @@
-# vms-wasm-ai-on-k8s
-Beyond Microservices: Running VMs, WASM, and AI Workloads on Kubernetes
+# Beyond Microservices: Running VMs, WASM, and AI Workloads on Kubernetes
+
+## Maintainer
+
+M.-Leander Reimer (@lreimer), <mario-leander.reimer@qaware.de>
+
+## License
+
+This software is provided under the MIT open source license, read the `LICENSE`
+file for details.
