@@ -28,7 +28,39 @@ kubectl get kubevirt -n kubevirt
 make bootstrap-cdi
 kubectl get pods -n cdi
 
+# first we create our first VM
+kubectl apply -f kubevirt/testvm.yaml
+kubectl get vms
 
+# we start and check that the VM instance is running
+kubectl virt start testvm
+kubectl get vmis
+kubectl virt console testvm
+
+# next we check the cluster internal communication
+kubectl apply -f kubevirt/testshell.yaml
+kubectl get vmis
+kubectl exec -it testshell -- /bin/sh
+ping <IP>
+
+# now expose the SSH port of the VM and connect to it
+kubectl virt expose vmi testvm --name=testvm-ssh --port=20222 --target-port=22 --type=LoadBalancer
+kubectl get services
+ssh cirros@<EXTERNAL-IP> -p 20222
+
+# there are also machine instance replica sets, this one can also be scaled
+kubectl apply -f kubevirt/testreplicaset.yaml
+kubectl virt expose vmirs testreplicaset --name=testreplicaset-ssh --port=22222 --target-port=22
+kubectl get vmis
+
+kubectl scale vmirs testreplicaset --replicas=2
+kubectl get vmis
+
+kubectl apply -f kubevirt/testhpa.yaml
+kubectl get vmis
+kubectl scale vmirs testreplicaset --replicas=3
+kubectl describe hpa testhpa
+kubectl get vmis
 ```
 
 ## WASM in Action
@@ -50,12 +82,12 @@ kubectl get models
 kollama expose deepseek-r1 --service-type LoadBalancer
 
 # to start a chat with ollama
-# exchange localhost with the actual LoadBalancer IP
+# !! exchange localhost with the actual LoadBalancer IP, or use port-forward
 OLLAMA_HOST=localhost:11434 ollama run llama3.1
 OLLAMA_HOST=localhost:11434 ollama run deepseek-r1:8b
 
 # call the chat API of Ollama or OpenAI
-kubectl port-forward svc/ollama-model-llama31-lbcurl  ollama
+kubectl port-forward svc/ollama-model-llama31-lbcurl ollama
 curl http://localhost:11434/v1/chat/completions -H "Content-Type: application/json" -d '{
     "model": "llama3.1",
     "messages": [
