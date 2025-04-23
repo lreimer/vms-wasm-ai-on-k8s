@@ -7,6 +7,9 @@
 # not all machine types support this feature, see https://cloud.google.com/compute/docs/machine-resource?hl=en#machine_type_comparison
 # otherwise make sure your Kube context points to your local cluster
 make create-gke-cluster
+
+# remember, once you are finished to destroy the cluster
+make delete-gke-cluster
 ```
 
 ## VMs in Action
@@ -20,6 +23,10 @@ kubectl krew install virt
 # check the status of all components, must be deployed status
 kubectl get all -n kubevirt
 kubectl get kubevirt -n kubevirt
+
+# (optional) deploy the containerized data importer components
+make bootstrap-cdi
+kubectl get pods -n cdi
 
 
 ```
