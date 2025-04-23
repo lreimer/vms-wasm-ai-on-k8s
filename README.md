@@ -16,6 +16,12 @@ make create-gke-cluster
 # this will install the operator and custom resource as describe in https://kubevirt.io/quickstart_cloud/
 make bootstrap-kubevirt
 kubectl krew install virt
+
+# check the status of all components, must be deployed status
+kubectl get all -n kubevirt
+kubectl get kubevirt -n kubevirt
+
+
 ```
 
 ## WASM in Action
@@ -28,10 +34,12 @@ kubectl krew install virt
 ```bash
 # model deployment using CLI
 kollama deploy llama3.1
+kubectl get models
 kollama expose llama3.1 --service-name=ollama-model-llama31-lb --service-type=LoadBalancer
 
 # model deployment via CRD
 kubectl apply -f infrastructure/models/deepseek-r1.yaml
+kubectl get models
 kollama expose deepseek-r1 --service-type LoadBalancer
 
 # to start a chat with ollama
