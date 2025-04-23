@@ -1,0 +1,12 @@
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: testhpa
+spec:
+  scaleTargetRef:
+    kind: VirtualMachineInstanceReplicaSet
+    name: testreplicaset
+    apiVersion: kubevirt.io/v1
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 50

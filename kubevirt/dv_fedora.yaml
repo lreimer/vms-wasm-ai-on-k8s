@@ -1,0 +1,19 @@
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: DataVolume
+metadata:
+  name: fedora
+spec:
+  storage:
+    accessModes:
+      - ReadWriteOnce
+    volumeMode: Block
+    # the StorageClass needs to have volumeBindingMode: Immediate
+    # storageClassName: standard-rwo
+    # storageClassName: local-
+    storageClassName: standard-cdi
+    resources:
+      requests:
+        storage: 5Gi
+  source:
+    http:
+      url: "https://download.fedoraproject.org/pub/fedora/linux/releases/37/Cloud/x86_64/images/Fedora-Cloud-Base-37-1.7.x86_64.raw.xz"
