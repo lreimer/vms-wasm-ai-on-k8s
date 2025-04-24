@@ -66,6 +66,34 @@ kubectl get vmis
 ## WASM in Action
 
 ```bash
+# install the prerequisites 
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.14.5/cert-manager.yaml
+kubectl get all -n cert-manager
+
+# Add Helm repository if not already done
+helm repo add kwasm http://kwasm.sh/kwasm-operator/
+
+# Install KWasm operator
+helm install \
+  kwasm-operator kwasm/kwasm-operator \
+  --namespace kwasm \
+  --create-namespace \
+  --set kwasmOperator.installerImage=ghcr.io/spinframework/containerd-shim-spin/node-installer:v0.19.0
+
+# Provision Nodes
+# Once cluster has scaled, make sure to apply the annotations again
+kubectl annotate node --all kwasm.sh/kwasm-node=true
+
+kubectl apply -f https://github.com/spinframework/spin-operator/releases/download/v0.5.0/spin-operator.crds.yaml
+kubectl apply -f https://github.com/spinframework/spin-operator/releases/download/v0.5.0/spin-operator.runtime-class.yaml
+kubectl apply -f https://github.com/spinframework/spin-operator/releases/download/v0.5.0/spin-operator.shim-executor.yaml
+
+helm install spin-operator \
+  --namespace spin-operator \
+  --create-namespace \
+  --version 0.5.0 \
+  --wait \
+  oci://ghcr.io/spinframework/charts/spin-operator
 ```
 
 ## AI Workloads in Action

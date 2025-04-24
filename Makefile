@@ -16,6 +16,7 @@ create-gke-cluster:
 		--workload-pool=$(GCP_PROJECT).svc.id.goog \
 		--machine-type=n1-standard-8 \
 		--accelerator type=nvidia-tesla-t4,count=1 \
+		--image-type=ubuntu_containerd \
 		--local-ssd-count=1 \
 		--enable-autoscaling \
         --num-nodes=1 \
