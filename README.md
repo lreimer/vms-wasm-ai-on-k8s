@@ -94,6 +94,11 @@ helm install spin-operator \
   --version 0.5.0 \
   --wait \
   oci://ghcr.io/spinframework/charts/spin-operator
+
+# try out the official Spin demo app
+kubectl apply -f https://raw.githubusercontent.com/spinframework/spin-operator/main/config/samples/simple.yaml
+kubectl port-forward svc/simple-spinapp 8083:80
+curl localhost:8083/hello
 ```
 
 ## AI Workloads in Action
@@ -105,7 +110,7 @@ kubectl get models
 kollama expose llama3.1 --service-name=ollama-model-llama31-lb --service-type=LoadBalancer
 
 # model deployment via CRD
-kubectl apply -f infrastructure/models/deepseek-r1.yaml
+kubectl apply -f ollama/deepseek-r1.yaml
 kubectl get models
 kollama expose deepseek-r1 --service-type LoadBalancer
 
