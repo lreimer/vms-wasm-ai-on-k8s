@@ -42,5 +42,9 @@ bootstrap-cdi:
 bootstrap-ollama:
 	@kubectl create -k ollama/	
 
+bootstrap-spinkube:
+	@kubectl apply -k spinkube/
+	@echo "Look at README. Install KWasm and Spin Operator Helm charts."
+
 delete-gke-cluster:
 	@gcloud container clusters delete vms-wasm-ai --region=$(GCP_REGION) --async --quiet
