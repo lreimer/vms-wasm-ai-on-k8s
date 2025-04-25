@@ -1,4 +1,4 @@
-# Beyond Microservices: Running VMs, WASM, and AI Workloads on Kubernetes
+# Beyond Microservices: Running VMs, WASM, and AI Workloads on K8s
 
 ## Setup
 
