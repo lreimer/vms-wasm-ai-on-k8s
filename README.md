@@ -99,6 +99,32 @@ helm install spin-operator \
 kubectl apply -f https://raw.githubusercontent.com/spinframework/spin-operator/main/config/samples/simple.yaml
 kubectl port-forward svc/simple-spinapp 8083:80
 curl localhost:8083/hello
+
+# build and deploy some Spin applications
+cd examples/
+
+spin new -t http-rust hello-spinkube --accept-defaults
+cd hello-spinkube
+
+spin build
+spin registry push ttl.sh/hello-spinkube:1h
+spin kube scaffold --from ttl.sh/hello-spinkube:1h
+spin kube deploy --from ttl.sh/hello-spinkube:1h
+kubectl get spinapps
+kubectl port-forward svc/hello-spinkube 8084:80
+curl localhost:8084/spinkube
+
+# nother webserver demo to serve files
+spin new -t static-fileserver hello-webserver --accept-defaults
+cd hello-webserver
+
+spin build
+spin registry push ttl.sh/hello-webserver:1h
+spin kube scaffold --from ttl.sh/hello-webserver:1h
+spin kube deploy --from ttl.sh/hello-webserver:1h
+kubectl get spinapps
+kubectl port-forward svc/hello-webserver 8085:80
+open http://localhost:8085/static/index.html
 ```
 
 ## AI Workloads in Action
